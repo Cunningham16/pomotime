@@ -1,10 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { constants } from './src/constants';
-import { Header } from './src/Header';
+import { View } from 'react-native';
 import { useCallback } from 'react';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import { StyleSheet } from "react-native"
+import { HeaderMain } from "./src/widgets/HeaderMain"
+import { TimerMain } from "./src/widgets/TimerMain"
+import { FooterMain } from "./src/widgets/FooterMain"
+import { constants } from './src/shared/constants';
 
 export default function App() {
   //Fonts
@@ -22,10 +25,13 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+  
   return (
-    <View style={styles.container} onLayout={onLayoutRootView}>
+    <View onLayout={onLayoutRootView} style={styles.container}>
       <StatusBar style='auto'/>
-      <Header />
+      <HeaderMain />
+      <TimerMain />
+      <FooterMain />
     </View>
   );
 }
