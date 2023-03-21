@@ -1,10 +1,18 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, Text, Animated, StyleSheet, Dimensions } from "react-native";
 import { Circle, G, Svg } from "react-native-svg";
+import { constants } from "../../shared/constants";
+import { useAppSelector, useAppDispatch } from "../../shared/hooks/ReduxHooks";
+import { decreaseCurrentTime } from "../TimerMain/model";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-export const CircleTimer = ({ time = 1500, title = "WORK" }) => {
+export const CircleTimer = () => {
+  const { currentTime, typeRound, roundTime, isTimerStarted } = useAppSelector(
+    (state) => state.TimerReducer
+  );
+  const dispatch = useAppDispatch()
+
   const strokeWidth = 13;
   const radius = 140;
   const halfCircle = radius + strokeWidth;
@@ -12,32 +20,50 @@ export const CircleTimer = ({ time = 1500, title = "WORK" }) => {
 
   const circleRef = React.useRef<typeof AnimatedCircle | null>(null);
   const animatedValue = React.useRef(new Animated.Value(0)).current;
-  const [percents, setPercents] = React.useState(1500);
+  const intervalRef = React.useRef<number>();
 
   function animation(toValue: number) {
-    const maxPerc = (100 * toValue) / time;
+    const maxPerc = (100 * toValue) / (roundTime*60);
     const strokeDashoffset =
       circleCircumference - (circleCircumference * maxPerc) / 100;
     return Animated.timing(animatedValue, {
       toValue: strokeDashoffset,
-      duration: 500,
+      duration: 1000,
       delay: 0,
       useNativeDriver: true,
     }).start();
   }
 
   React.useEffect(() => {
-    setInterval(() => {
-      setPercents(percents - 1);
-    }, 1000);
-  }, []);
+    if (isTimerStarted) {
+      intervalRef.current = window.setInterval(() => {
+        dispatch(decreaseCurrentTime())
+      }, 1000);
+    } else {
+      clearInterval(intervalRef.current);
+    }
+    return () => {
+      clearInterval(intervalRef.current);
+    };
+  }, [isTimerStarted]);
 
   React.useEffect(() => {
-    animation(percents);
-  }, [percents]);
+    animation(currentTime);
+  }, [currentTime]);
+
+  const [colorCircle, setColorCircle] = React.useState<string>(constants.workColor)
+  React.useEffect(() => {
+    if (typeRound === "WORK") {
+      setColorCircle(constants.workColor);
+    } else if (typeRound === "SHORT BREAK") {
+      setColorCircle(constants.shortBreakColor);
+    } else if (typeRound === "LONG BREAK") {
+      setColorCircle(constants.longBreakColor);
+    }
+  }, [typeRound]);
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View style={styles.circleView}>
       <Svg
         width={radius * 2}
         height={radius * 2}
@@ -57,7 +83,7 @@ export const CircleTimer = ({ time = 1500, title = "WORK" }) => {
             ref={circleRef}
             cx="50%"
             cy="50%"
-            stroke={"#fff"}
+            stroke={colorCircle}
             strokeWidth={strokeWidth}
             r={radius}
             fill="transparent"
@@ -67,16 +93,9 @@ export const CircleTimer = ({ time = 1500, title = "WORK" }) => {
           />
         </G>
       </Svg>
-      <View
-        style={{
-          flex: 1,
-          position: "absolute",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Text>{secondsToTimer(percents)}</Text>
-        <Text>WORK</Text>
+      <View style={styles.textView}>
+        <Text style={styles.timerText}>{secondsToTimer(currentTime)}</Text>
+        <Text style={styles.titleRound}>{typeRound}</Text>
       </View>
     </View>
   );
@@ -89,3 +108,33 @@ function secondsToTimer(seconds: number) {
   const padddedSeconds = String(remainingSeconds).padStart(2, "0");
   return `${paddedMinutes}:${padddedSeconds}`;
 }
+
+const styles = StyleSheet.create({
+  textView: {
+    display: "flex",
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  circleView: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 17,
+  },
+  timerText: {
+    color: constants.whiteColor,
+    fontSize: 55,
+    fontWeight: "600",
+    fontFamily: "roboto-mono",
+    letterSpacing: -0.075,
+    lineHeight: 73,
+  },
+  titleRound: {
+    color: constants.whiteColor,
+    fontFamily: "open-sans",
+    fontSize: 25,
+    lineHeight: 34,
+    fontWeight: "600",
+  },
+});

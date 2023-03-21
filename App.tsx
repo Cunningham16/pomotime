@@ -8,6 +8,8 @@ import { HeaderMain } from "./src/widgets/HeaderMain"
 import { TimerMain } from "./src/widgets/TimerMain"
 import { FooterMain } from "./src/widgets/FooterMain"
 import { constants } from './src/shared/constants';
+import { Provider } from 'react-redux';
+import {store} from './src/shared/store'
 
 export default function App() {
   //Fonts
@@ -27,12 +29,14 @@ export default function App() {
   }
   
   return (
-    <View onLayout={onLayoutRootView} style={styles.container}>
-      <StatusBar style='auto'/>
-      <HeaderMain />
-      <TimerMain />
-      <FooterMain />
-    </View>
+    <Provider store={store}>
+      <View onLayout={onLayoutRootView} style={styles.container}>
+        <StatusBar style="auto" />
+        <HeaderMain />
+        <TimerMain />
+        <FooterMain />
+      </View>
+    </Provider>
   );
 }
 

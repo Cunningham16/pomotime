@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { TimerReducer } from "../../widgets/TimerMain/model";
 import { footerReducer } from "../../widgets/FooterMain/model";
 
-const store = configureStore({
+export const store = configureStore({
     reducer: {
         TimerReducer,
         footerReducer

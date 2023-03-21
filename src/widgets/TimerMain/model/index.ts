@@ -3,16 +3,16 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 interface TimerState {
     currentTime: number,
     roundTime: number,
-    typeRound: 'work' | 'short break' | 'long break',
+    typeRound: 'WORK' | 'SHORT BREAK' | 'LONG BREAK',
     isTimerStarted: boolean
 }
 
 const initialState: TimerState = {
-    currentTime: 1500,
-    roundTime: 25,
-    typeRound: 'work',
-    isTimerStarted: false,
-}
+  currentTime: 1500,
+  roundTime: 25,
+  typeRound: "WORK",
+  isTimerStarted: false,
+};
 
 const TimerSlice = createSlice({
   name: 'timer',
@@ -23,21 +23,21 @@ const TimerSlice = createSlice({
     },
     setTypeRound(state, action: PayloadAction<TimerState["typeRound"]>){
         state.typeRound = action.payload
-        if(action.payload === 'work'){
-            state.roundTime = 25
-        }else if(action.payload === 'long break'){
-            state.roundTime = 5
-        }else if(action.payload === 'short break'){
-            state.roundTime = 15
+        if (action.payload === "WORK") {
+          state.roundTime = 25;
+        } else if (action.payload === "LONG BREAK") {
+          state.roundTime = 5;
+        } else if (action.payload === "SHORT BREAK") {
+          state.roundTime = 15;
         }
         state.currentTime = state.roundTime * 60
     },
-    setTimeStarted(state, action: PayloadAction<boolean>){
-        state.isTimerStarted = action.payload
+    toggleTimeStarted(state){
+        state.isTimerStarted = !state.isTimerStarted;
     },
   }
 });
 
-export const {decreaseCurrentTime, setTypeRound, setTimeStarted} = TimerSlice.actions
+export const {decreaseCurrentTime, setTypeRound, toggleTimeStarted} = TimerSlice.actions
 
 export const TimerReducer = TimerSlice.reducer
