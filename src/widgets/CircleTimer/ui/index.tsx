@@ -1,9 +1,11 @@
 import React from "react";
-import { View, Text, Animated, StyleSheet, Dimensions } from "react-native";
+import { View, Text, Animated } from "react-native";
 import { Circle, G, Svg } from "react-native-svg";
-import { constants } from "../../shared/constants";
-import { useAppSelector, useAppDispatch } from "../../shared/hooks/ReduxHooks";
-import { decreaseCurrentTime } from "../TimerMain/model";
+import { constants } from "shared/constants";
+import { useAppSelector, useAppDispatch } from "shared/hooks/ReduxHooks";
+import { decreaseCurrentTime } from "widgets/TimerMain";
+import { secondsToTimer } from "../lib/secondsToTimer";
+import styles from "./styles";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -11,7 +13,7 @@ export const CircleTimer = () => {
   const { currentTime, typeRound, roundTime, isTimerStarted } = useAppSelector(
     (state) => state.TimerReducer
   );
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const strokeWidth = 13;
   const radius = 140;
@@ -23,7 +25,7 @@ export const CircleTimer = () => {
   const intervalRef = React.useRef<number>();
 
   function animation(toValue: number) {
-    const maxPerc = (100 * toValue) / (roundTime*60);
+    const maxPerc = (100 * toValue) / (roundTime * 60);
     const strokeDashoffset =
       circleCircumference - (circleCircumference * maxPerc) / 100;
     return Animated.timing(animatedValue, {
@@ -37,7 +39,7 @@ export const CircleTimer = () => {
   React.useEffect(() => {
     if (isTimerStarted) {
       intervalRef.current = window.setInterval(() => {
-        dispatch(decreaseCurrentTime())
+        dispatch(decreaseCurrentTime());
       }, 1000);
     } else {
       clearInterval(intervalRef.current);
@@ -51,7 +53,9 @@ export const CircleTimer = () => {
     animation(currentTime);
   }, [currentTime]);
 
-  const [colorCircle, setColorCircle] = React.useState<string>(constants.workColor)
+  const [colorCircle, setColorCircle] = React.useState<string>(
+    constants.workColor
+  );
   React.useEffect(() => {
     if (typeRound === "WORK") {
       setColorCircle(constants.workColor);
@@ -100,41 +104,3 @@ export const CircleTimer = () => {
     </View>
   );
 };
-
-function secondsToTimer(seconds: number) {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  const paddedMinutes = String(minutes).padStart(2, "0");
-  const padddedSeconds = String(remainingSeconds).padStart(2, "0");
-  return `${paddedMinutes}:${padddedSeconds}`;
-}
-
-const styles = StyleSheet.create({
-  textView: {
-    display: "flex",
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  circleView: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 17,
-  },
-  timerText: {
-    color: constants.whiteColor,
-    fontSize: 55,
-    fontWeight: "600",
-    fontFamily: "roboto-mono",
-    letterSpacing: -0.075,
-    lineHeight: 73,
-  },
-  titleRound: {
-    color: constants.whiteColor,
-    fontFamily: "open-sans",
-    fontSize: 25,
-    lineHeight: 34,
-    fontWeight: "600",
-  },
-});

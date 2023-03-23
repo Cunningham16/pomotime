@@ -1,5 +1,5 @@
 import { Text, View, Image, TouchableOpacity } from "react-native";
-import menuImg from "../../../../assets/menu.png";
+import menuImg from "assets/menu.png";
 import styles from "./styles";
 
 export const Header = () => {

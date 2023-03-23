@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
-import { constants } from "../../../shared/constants";
+import { constants } from "shared/constants";
 
 const styles = StyleSheet.create({
   container: {
@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 15,
     flexDirection: "row",
-    position: 'relative',
+    position: "relative",
   },
   text: {
     fontSize: 18,
@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
     fontFamily: "open-sans",
     fontStyle: "normal",
     textAlign: "center",
-    position: 'absolute',
-    width: Dimensions.get('window').width,
+    position: "absolute",
+    width: Dimensions.get("window").width,
   },
   button: {
     width: 35,

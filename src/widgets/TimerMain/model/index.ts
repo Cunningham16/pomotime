@@ -25,9 +25,9 @@ const TimerSlice = createSlice({
         state.typeRound = action.payload
         if (action.payload === "WORK") {
           state.roundTime = 25;
-        } else if (action.payload === "LONG BREAK") {
-          state.roundTime = 5;
         } else if (action.payload === "SHORT BREAK") {
+          state.roundTime = 5;
+        } else if (action.payload === "LONG BREAK") {
           state.roundTime = 15;
         }
         state.currentTime = state.roundTime * 60
@@ -35,9 +35,13 @@ const TimerSlice = createSlice({
     toggleTimeStarted(state){
         state.isTimerStarted = !state.isTimerStarted;
     },
+    setTimeStop(state){
+      state.isTimerStarted = false
+    }
   }
 });
 
-export const {decreaseCurrentTime, setTypeRound, toggleTimeStarted} = TimerSlice.actions
+export const { decreaseCurrentTime, setTypeRound, toggleTimeStarted, setTimeStop } =
+  TimerSlice.actions;
 
 export const TimerReducer = TimerSlice.reducer

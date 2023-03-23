@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    currentRounds: 0,
+    currentRounds: 1,
     allRounds: 4,
 }
 
@@ -13,11 +13,11 @@ const FooterSlice = createSlice({
         state.currentRounds = state.currentRounds + 1
     },
     clearRounds(state){
-        state.currentRounds = 0
+        state.currentRounds = 1
     }
   }
 });
 
-export const {} = FooterSlice.actions
+export const { addRound, clearRounds } = FooterSlice.actions;
 
 export const footerReducer = FooterSlice.reducer
