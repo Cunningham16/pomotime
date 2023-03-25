@@ -1,6 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import { StyleSheet, View, Dimensions, Text, Animated } from "react-native";
 import { useAppSelector } from "shared/hooks/ReduxHooks";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import SettingsSVG from "shared/assets/SettingsSVG";
+import TimerSettingsSVG from "shared/assets/TimerSettingsSVG";
+import { constants } from "shared/constants";
+import { TimerSettings } from "widgets/TimerSettings/ui";
+import { getHeaderTitle } from "@react-navigation/elements";
+import { HeaderSettings } from "widgets/HeaderSettings";
+import { SettingsSection } from "widgets/SettingsSection";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -33,6 +42,7 @@ export const Sidebar = () => {
   useEffect(() => {
     animateSidebar();
   }, [isOpenSidebar]);
+  const Tab = createBottomTabNavigator();
 
   return (
     <AnimatedView
@@ -42,12 +52,45 @@ export const Sidebar = () => {
         position: "absolute",
         top: 70,
         transform: [{ translateX: animatedValue }],
-        backgroundColor: 'white',
+        backgroundColor: "white",
         zIndex: 99,
       }}
       ref={viewRef}
     >
-      <Text>Hello world</Text>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={{
+            tabBarShowLabel: false,
+            tabBarActiveTintColor: "#ED4B40",
+            tabBarStyle: {
+              backgroundColor: constants.primaryColor,
+            },
+          }}
+        >
+          <Tab.Screen
+            name="Timer"
+            component={TimerSettings}
+            options={{
+              tabBarIcon: ({ color }) => <TimerSettingsSVG color={color} />,
+              header: ({ route, options }) => {
+                const title = getHeaderTitle(options, route.name);
+                return <HeaderSettings title={title} />;
+              },
+            }}
+          />
+          <Tab.Screen
+            name="Settings"
+            component={SettingsSection}
+            options={{
+              tabBarIcon: ({ color }) => <SettingsSVG color={color} />,
+              header: ({ route, options }) => {
+                const title = getHeaderTitle(options, route.name);
+                return <HeaderSettings title={title} />;
+              },
+            }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
     </AnimatedView>
   );
 };

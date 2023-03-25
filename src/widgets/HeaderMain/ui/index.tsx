@@ -16,7 +16,7 @@ export const Header = () => {
 
   return (
     <View style={styles.container}>
-      <Sidebar />
+      {isOpenSidebar && <Sidebar />}
       <Pressable
         onPress={openSidebar}
         style={{

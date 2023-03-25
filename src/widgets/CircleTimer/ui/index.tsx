@@ -51,7 +51,7 @@ export const CircleTimer = () => {
 
   React.useEffect(() => {
     animation(currentTime);
-  }, [currentTime]);
+  }, [currentTime, roundTime]);
 
   const [colorCircle, setColorCircle] = React.useState<string>(
     constants.workColor
