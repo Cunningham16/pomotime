@@ -56,6 +56,7 @@ export const CircleTimer = () => {
   const [colorCircle, setColorCircle] = React.useState<string>(
     constants.workColor
   );
+  
   React.useEffect(() => {
     if (typeRound === "WORK") {
       setColorCircle(constants.workColor);

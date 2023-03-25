@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 15,
     flexDirection: "row",
-    position: "relative",
+    zIndex: 10,
   },
   text: {
     fontSize: 18,
@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
   },
   button: {
-    width: 35,
-    height: 35,
+    width: 50,
+    height: 50,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",

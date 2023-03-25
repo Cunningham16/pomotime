@@ -1,15 +1,32 @@
-import { Text, View, Image, TouchableOpacity } from "react-native";
-import menuImg from "assets/menu.png";
+import { Text, View, TouchableOpacity, Pressable } from "react-native";
 import styles from "./styles";
+import MenuButtonSVG from "shared/assets/MenuButtonSVG";
+import CloseButtonSVG from "shared/assets/CloseButtonSVG";
+import { useAppDispatch, useAppSelector } from "shared/hooks/ReduxHooks";
+import { toggleSidebar } from "../model";
+import { Sidebar } from "widgets/Sidebar/ui";
 
 export const Header = () => {
+  const { isOpenSidebar } = useAppSelector((state) => state.headerReducer);
+  const dispatch = useAppDispatch();
+
+  const openSidebar = () => {
+    dispatch(toggleSidebar());
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <Sidebar />
+      <Pressable
+        onPress={openSidebar}
+        style={{
+          zIndex: 20,
+        }}
+      >
         <View style={styles.button}>
-          <Image source={menuImg} />
+          {isOpenSidebar ? <CloseButtonSVG /> : <MenuButtonSVG />}
         </View>
-      </TouchableOpacity>
+      </Pressable>
       <Text style={styles.text}>Pomotime</Text>
     </View>
   );

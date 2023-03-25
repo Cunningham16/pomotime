@@ -1,12 +1,11 @@
-import { Text, View, Image, TouchableOpacity } from "react-native";
-
-import soundOnImg from "assets/sound-on.png";
-import nextRoundImg from "assets/next-round.png";
+import { Text, View, TouchableOpacity } from "react-native";
 
 import styles from "./styles";
 import { useAppDispatch, useAppSelector } from "shared/hooks/ReduxHooks";
 import { addRound, clearRounds } from "../model";
 import { setTimeStop, setTypeRound } from "widgets/TimerMain/model";
+import SoundOnSVG from "shared/assets/SoundOnSVG";
+import NextRoundSVG from "shared/assets/NextRoundSVG";
 
 export const FooterMain = () => {
   const { currentRounds, allRounds } = useAppSelector(
@@ -49,12 +48,12 @@ export const FooterMain = () => {
       <View style={styles.buttons_container}>
         <TouchableOpacity onPress={pressNextRound}>
           <View style={styles.button}>
-            <Image source={nextRoundImg} />
+            <NextRoundSVG />
           </View>
         </TouchableOpacity>
         <TouchableOpacity>
           <View style={styles.button}>
-            <Image source={soundOnImg} />
+            <SoundOnSVG />
           </View>
         </TouchableOpacity>
       </View>
